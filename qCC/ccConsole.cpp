@@ -64,6 +64,7 @@ ccConsole::ccConsole()
 	, m_parentWidget(0)
 	, m_parentWindow(0)
 	, m_logStream(0)
+	, m_mutex(QMutex::Recursive)
 {
 }
 
