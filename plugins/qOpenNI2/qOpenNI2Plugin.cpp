@@ -21,6 +21,23 @@
 //Qt
 #include <QtGui>
 
+/* OpenNI2 */
+#include <OpenNI.h>
+#include "OniSampleUtilities.h"
+
+using namespace openni;
+#define SAMPLE_READ_WAIT_TIMEOUT 2000 //2000ms
+
+void qOpenNI2Plugin::console(const char *arg1){
+	m_app->dispToConsole(QString("[qOpenNI2Plugin] Warning: %1").arg(arg1));
+
+}
+
+void qOpenNI2Plugin::console(const char *arg1, const char *arg2){
+	m_app->dispToConsole(QString("[qOpenNI2Plugin] Warning: %1\n%2").arg(arg1, arg2));
+
+}
+
 //Default constructor: should mainly be used to initialize
 //actions (pointers) and other members
 qOpenNI2Plugin::qOpenNI2Plugin(QObject* parent/*=0*/)
@@ -77,9 +94,94 @@ void qOpenNI2Plugin::doAction()
 	//--> you may want to start by asking parameters (with a custom dialog, etc.)
 
 	//This is how you can output messages
-	m_app->dispToConsole("[qOpenNI2Plugin] Hello world!",ccMainAppInterface::STD_CONSOLE_MESSAGE); //a standard message is displayed in the console
-	m_app->dispToConsole("[qOpenNI2Plugin] Warning: OpenNI2 plugin shouldn't be used as is!",ccMainAppInterface::WRN_CONSOLE_MESSAGE); //a warning message is displayed in the console
-	m_app->dispToConsole("OpenNI2 plugin shouldn't be used as is!",ccMainAppInterface::ERR_CONSOLE_MESSAGE); //an error message is displayed in the console AND an error box will pop-up!
+	//m_app->dispToConsole("[qOpenNI2Plugin] Hello world!",ccMainAppInterface::STD_CONSOLE_MESSAGE); //a standard message is displayed in the console
+	//m_app->dispToConsole("[qOpenNI2Plugin] Warning: OpenNI2 plugin shouldn't be used as is!",ccMainAppInterface::WRN_CONSOLE_MESSAGE); //a warning message is displayed in the console
+	//m_app->dispToConsole("OpenNI2 plugin shouldn't be used as is!",ccMainAppInterface::ERR_CONSOLE_MESSAGE); //an error message is displayed in the console AND an error box will pop-up!
+	console("Hello world!", "(from console.)"); //a standard message is displayed in the console
+
+
+	Status rc = OpenNI::initialize();
+	if (rc != STATUS_OK)
+	{
+		// printf("Initialize failed\n%s\n", OpenNI::getExtendedError());
+		console("Initialize failed:", OpenNI::getExtendedError());
+		return;
+	}
+
+	Device device;
+	rc = device.open(ANY_DEVICE);
+	if (rc != STATUS_OK)
+	{
+		// printf("Couldn't open device\n%s\n", OpenNI::getExtendedError());
+		console("Couldn't open device:", OpenNI::getExtendedError());
+		return;
+	}
+
+	VideoStream depth;
+
+	if (device.getSensorInfo(SENSOR_DEPTH) != NULL)
+	{
+		rc = depth.create(device, SENSOR_DEPTH);
+		if (rc != STATUS_OK)
+		{
+			// printf("Couldn't create depth stream\n%s\n", OpenNI::getExtendedError());
+			console("Couldn't create depth stream:", OpenNI::getExtendedError());
+			return;
+		}
+	}
+
+	rc = depth.start();
+	if (rc != STATUS_OK)
+	{
+		// printf("Couldn't start the depth stream\n%s\n", OpenNI::getExtendedError());
+		console("Couldn't start the depth stream:", OpenNI::getExtendedError());
+		return;
+	}
+
+	VideoFrameRef frame;
+
+	console("Entering stream-read loop...\n");
+	//while (!wasKeyboardHit())
+	int frames_to_read = 150;
+	for (int i = 0; i < frames_to_read; i++)
+	{
+		int changedStreamDummy;
+		VideoStream* pStream = &depth;
+		rc = OpenNI::waitForAnyStream(&pStream, 1, &changedStreamDummy, SAMPLE_READ_WAIT_TIMEOUT);
+		if (rc != STATUS_OK)
+		{
+			printf("Wait failed! (timeout is %d ms)\n%s\n", SAMPLE_READ_WAIT_TIMEOUT, OpenNI::getExtendedError());
+			//console("Wait failed:", OpenNI::getExtendedError());
+			continue;
+		}
+
+		rc = depth.readFrame(&frame);
+		if (rc != STATUS_OK)
+		{
+			printf("Read failed!\n%s\n", OpenNI::getExtendedError());
+			//console("Read failed:", OpenNI::getExtendedError());
+			continue;
+		}
+
+		if (frame.getVideoMode().getPixelFormat() != PIXEL_FORMAT_DEPTH_1_MM && frame.getVideoMode().getPixelFormat() != PIXEL_FORMAT_DEPTH_100_UM)
+		{
+			printf("Unexpected frame format\n");
+			//console("Unexpected frame format.");
+			continue;
+		}
+
+		DepthPixel* pDepth = (DepthPixel*)frame.getData();
+
+		int middleIndex = (frame.getHeight() + 1)*frame.getWidth() / 2;
+
+		//printf("[%08llu] %8d\n", (long long)frame.getTimestamp(), pDepth[middleIndex]);
+		m_app->dispToConsole(QString("[qOpenNI2Plugin] %1").arg(pDepth[middleIndex]));
+	}
+
+	depth.stop();
+	depth.destroy();
+	device.close();
+	OpenNI::shutdown();
 
 	/*** HERE ENDS THE ACTION ***/
 

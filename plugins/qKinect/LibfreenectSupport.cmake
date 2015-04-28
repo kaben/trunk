@@ -32,7 +32,7 @@ function( target_link_libfreenect ) # 2 arguments: ARGV0 = project name / ARGV1 
 				install_ext( FILES ${LIBFREENECT_SHARED_LIBRARY_FILE} ${ARGV1} )
 			endif()
 		endif()
-		
+
 	else()
 
 		message( SEND_ERROR "No libfreenect library file specified (LIBFREENECT_LIBRARY_FILE)" )

@@ -21,10 +21,14 @@ project( QOPENNI2_PLUGIN )
 
 #if the plugin is an 'OpenGL filter', uncomment the line below
 #set( CC_OPENGL_FILTER ON BOOL)
+
+include( OpenNI2Support.cmake )
 include( ../CMakePluginTpl.cmake )
 
 #set dependencies to necessary libraries (see qPCV for an example)
 #target_link_libraries( ${PROJECT_NAME} LIB1 )
 #include_directories( ${LIB1_INCLUDE_DIR} )
+
+target_link_OpenNI2( ${PROJECT_NAME} ${CLOUDCOMPARE_DEST_FOLDER} )
 
 endif()

@@ -25,19 +25,11 @@
 #include <QObject>
 
 //! OpenNI2 qCC plugin
-/** Replace the 'qOpenNI2Plugin' string by your own plugin class name
-	and then check 'qOpenNI2Plugin.cpp' for more directions (you
-	have to fill-in the blank methods. The most important one is the
-	'getActions' method.  This method should return all actions
-	(QAction objects). CloudCompare will automatically add them to an
-	icon in the plugin toolbar and to an entry in the plugin menu
-	(if your plugin returns several actions, CC will create a dedicated
-	toolbar and sub-menu).
-	You are responsible to connect these actions to custom slots of your
-	plugin.
+/**
 	Look at the ccStdPluginInterface::m_app attribute to get access to
 	most of CC components (database, 3D views, console, etc.).
 **/
+
 class qOpenNI2Plugin : public QObject, public ccStdPluginInterface
 {
 	Q_OBJECT
@@ -59,6 +51,13 @@ public:
 
 	//inherited from ccStdPluginInterface
 	void onNewSelection(const ccHObject::Container& selectedEntities);
+	/*
+	Return all actions (QAction objects). CloudCompare will automatically
+	add them to an icon in the plugin toolbar and to an entry in the
+	plugin menu (when several actions are returned, CC will create a
+	dedicated toolbar and sub-menu).
+	These actions must be connected to custom slots of this	plugin.
+  */
 	virtual void getActions(QActionGroup& group);
 
 protected slots:
@@ -68,12 +67,16 @@ protected slots:
 
 protected:
 
-	//! Default action
-	/** You can add as many actions as you want in a plugin.
-		All actions will correspond to an icon in the dedicated
+	//! Actions
+	/** Add as many actions as you want.
+		Each will correspond to an icon in the dedicated
 		toolbar and an entry in the plugin menu.
 	**/
 	QAction* m_action;
+
+protected:
+	void console(const char *);
+	void console(const char *, const char *);
 };
 
 #endif
