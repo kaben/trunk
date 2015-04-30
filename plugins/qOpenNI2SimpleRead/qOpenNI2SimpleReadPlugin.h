@@ -30,7 +30,7 @@
 	most of CC components (database, 3D views, console, etc.).
 **/
 
-class qOpenNI2Plugin : public QObject, public ccStdPluginInterface
+class qOpenNI2SimpleReadPlugin : public QObject, public ccStdPluginInterface
 {
 	Q_OBJECT
 	Q_INTERFACES(ccStdPluginInterface)
@@ -42,10 +42,10 @@ class qOpenNI2Plugin : public QObject, public ccStdPluginInterface
 public:
 
 	//! Default constructor
-	qOpenNI2Plugin(QObject* parent=0);
+	qOpenNI2SimpleReadPlugin(QObject* parent=0);
 
 	//inherited from ccPluginInterface
-	virtual QString getName() const { return "qOpenNI2Plugin"; }
+	virtual QString getName() const { return "qOpenNI2SimpleReadPlugin"; }
 	virtual QString getDescription() const { return "OpenNI2 plugin (add description here)"; }
 	virtual QIcon getIcon() const;
 

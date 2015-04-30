@@ -15,8 +15,8 @@
 //#                                                                        #
 //##########################################################################
 
-//First: replace all occurences of 'qOpenNI2Plugin' by your own plugin class name in this file!
-#include "qOpenNI2Plugin.h"
+//First: replace all occurences of 'qOpenNI2SimpleReadPlugin' by your own plugin class name in this file!
+#include "qOpenNI2SimpleReadPlugin.h"
 
 //Qt
 #include <QtGui>
@@ -28,19 +28,19 @@
 using namespace openni;
 #define SAMPLE_READ_WAIT_TIMEOUT 2000 //2000ms
 
-void qOpenNI2Plugin::console(const char *arg1){
-	m_app->dispToConsole(QString("[qOpenNI2Plugin] Warning: %1").arg(arg1));
+void qOpenNI2SimpleReadPlugin::console(const char *arg1){
+	m_app->dispToConsole(QString("[qOpenNI2SimpleReadPlugin] Warning: %1").arg(arg1));
 
 }
 
-void qOpenNI2Plugin::console(const char *arg1, const char *arg2){
-	m_app->dispToConsole(QString("[qOpenNI2Plugin] Warning: %1\n%2").arg(arg1, arg2));
+void qOpenNI2SimpleReadPlugin::console(const char *arg1, const char *arg2){
+	m_app->dispToConsole(QString("[qOpenNI2SimpleReadPlugin] Warning: %1\n%2").arg(arg1, arg2));
 
 }
 
 //Default constructor: should mainly be used to initialize
 //actions (pointers) and other members
-qOpenNI2Plugin::qOpenNI2Plugin(QObject* parent/*=0*/)
+qOpenNI2SimpleReadPlugin::qOpenNI2SimpleReadPlugin(QObject* parent/*=0*/)
 	: QObject(parent)
 	, m_action(0)
 {
@@ -50,7 +50,7 @@ qOpenNI2Plugin::qOpenNI2Plugin(QObject* parent/*=0*/)
 //depending on the currently selected entities ('selectedEntities').
 //For example: if none of the selected entities is a cloud, and your
 //plugin deals only with clouds, call 'm_action->setEnabled(false)'
-void qOpenNI2Plugin::onNewSelection(const ccHObject::Container& selectedEntities)
+void qOpenNI2SimpleReadPlugin::onNewSelection(const ccHObject::Container& selectedEntities)
 {
 	//if (m_action)
 	//	m_action->setEnabled(!selectedEntities.empty());
@@ -58,7 +58,7 @@ void qOpenNI2Plugin::onNewSelection(const ccHObject::Container& selectedEntities
 
 //This method returns all 'actions' of your plugin.
 //It will be called only once, when plugin is loaded.
-void qOpenNI2Plugin::getActions(QActionGroup& group)
+void qOpenNI2SimpleReadPlugin::getActions(QActionGroup& group)
 {
 	//default action (if it has not been already created, it's the moment to do it)
 	if (!m_action)
@@ -80,7 +80,7 @@ void qOpenNI2Plugin::getActions(QActionGroup& group)
 //main's interface). You can access to most of CC components (database,
 //3D views, console, etc.) via the 'm_app' attribute (ccMainAppInterface
 //object).
-void qOpenNI2Plugin::doAction()
+void qOpenNI2SimpleReadPlugin::doAction()
 {
 	//m_app should have already been initialized by CC when plugin is loaded!
 	//(--> pure internal check)
@@ -94,8 +94,8 @@ void qOpenNI2Plugin::doAction()
 	//--> you may want to start by asking parameters (with a custom dialog, etc.)
 
 	//This is how you can output messages
-	//m_app->dispToConsole("[qOpenNI2Plugin] Hello world!",ccMainAppInterface::STD_CONSOLE_MESSAGE); //a standard message is displayed in the console
-	//m_app->dispToConsole("[qOpenNI2Plugin] Warning: OpenNI2 plugin shouldn't be used as is!",ccMainAppInterface::WRN_CONSOLE_MESSAGE); //a warning message is displayed in the console
+	//m_app->dispToConsole("[qOpenNI2SimpleReadPlugin] Hello world!",ccMainAppInterface::STD_CONSOLE_MESSAGE); //a standard message is displayed in the console
+	//m_app->dispToConsole("[qOpenNI2SimpleReadPlugin] Warning: OpenNI2 plugin shouldn't be used as is!",ccMainAppInterface::WRN_CONSOLE_MESSAGE); //a warning message is displayed in the console
 	//m_app->dispToConsole("OpenNI2 plugin shouldn't be used as is!",ccMainAppInterface::ERR_CONSOLE_MESSAGE); //an error message is displayed in the console AND an error box will pop-up!
 	console("Hello world!", "(from console.)"); //a standard message is displayed in the console
 
@@ -175,7 +175,7 @@ void qOpenNI2Plugin::doAction()
 		int middleIndex = (frame.getHeight() + 1)*frame.getWidth() / 2;
 
 		//printf("[%08llu] %8d\n", (long long)frame.getTimestamp(), pDepth[middleIndex]);
-		m_app->dispToConsole(QString("[qOpenNI2Plugin] %1").arg(pDepth[middleIndex]));
+		m_app->dispToConsole(QString("[qOpenNI2SimpleReadPlugin] %1").arg(pDepth[middleIndex]));
 	}
 
 	depth.stop();
@@ -190,15 +190,15 @@ void qOpenNI2Plugin::doAction()
 //This method should return the plugin icon (it will be used mainly
 //if your plugin as several actions in which case CC will create a
 //dedicated sub-menu entry with this icon.
-QIcon qOpenNI2Plugin::getIcon() const
+QIcon qOpenNI2SimpleReadPlugin::getIcon() const
 {
-	//open qOpenNI2Plugin.qrc (text file), update the "prefix" and the
+	//open qOpenNI2SimpleReadPlugin.qrc (text file), update the "prefix" and the
 	//icon(s) filename(s). Then save it with the right name (yourPlugin.qrc).
-	//(eventually, remove the original qOpenNI2Plugin.qrc file!)
-	return QIcon(":/CC/plugin/qOpenNI2Plugin/icon.png");
+	//(eventually, remove the original qOpenNI2SimpleReadPlugin.qrc file!)
+	return QIcon(":/CC/plugin/qOpenNI2SimpleReadPlugin/icon.png");
 }
 
 #ifndef CC_QT5
-//Don't forget to replace 'qOpenNI2Plugin' by your own plugin class name here also!
-Q_EXPORT_PLUGIN2(qOpenNI2Plugin,qOpenNI2Plugin);
+//Don't forget to replace 'qOpenNI2SimpleReadPlugin' by your own plugin class name here also!
+Q_EXPORT_PLUGIN2(qOpenNI2SimpleReadPlugin,qOpenNI2SimpleReadPlugin);
 #endif

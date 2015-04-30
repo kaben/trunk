@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 set( OPENNI2_INCLUDE_DIR "" CACHE PATH "Include directory of OpenNI2" )
-set( OPENNI2_INCLUDE_DIR "" CACHE FILEPATH "Library file of OpenNI2" )
+set( OPENNI2_LIBRARY_FILE "" CACHE FILEPATH "Library file of OpenNI2" )
 if (WIN32)
 	set( OPENNI2_SHARED_LIBRARY_FILE "" CACHE FILEPATH "Shared library file of OpenNI2 (dll)" )
 endif()
@@ -11,8 +11,8 @@ endif()
 if ( NOT OPENNI2_INCLUDE_DIR )
     message( SEND_ERROR "Fill in the OpenNI2 include folder path (OPENNI2_INCLUDE_DIR)" )
 endif()
-if ( NOT OPENNI2_INCLUDE_DIR )
-    message( SEND_ERROR "Fill in the OpenNI2 library file path (OPENNI2_INCLUDE_DIR)" )
+if ( NOT OPENNI2_LIBRARY_FILE )
+    message( SEND_ERROR "Fill in the OpenNI2 library file path (OPENNI2_LIBRARY_FILE)" )
 endif()
 
 include_directories( ${OPENNI2_INCLUDE_DIR}/Include )
@@ -21,9 +21,9 @@ include_directories( ${OPENNI2_INCLUDE_DIR}/Samples/Common )
 # Link project with OpenNI2 library and export Dll(s) to specified destinations
 function( target_link_OpenNI2 ) # 2 arguments: ARGV0 = project name / ARGV1 = shared lib export folder
 
-	if( OPENNI2_INCLUDE_DIR )
+	if( OPENNI2_LIBRARY_FILE )
 
-		target_link_libraries( ${PROJECT_NAME} ${OPENNI2_INCLUDE_DIR} )
+		target_link_libraries( ${PROJECT_NAME} ${OPENNI2_LIBRARY_FILE} )
 
 		# post-build events: we need to export OpenNI2.dll as well!
 		if ( WIN32 AND ARGV1 )
@@ -35,7 +35,7 @@ function( target_link_OpenNI2 ) # 2 arguments: ARGV0 = project name / ARGV1 = sh
 
 	else()
 
-		message( SEND_ERROR "No OpenNI2 library file specified (OPENNI2_INCLUDE_DIR)" )
+		message( SEND_ERROR "No OpenNI2 library file specified (OPENNI2_LIBRARY_FILE)" )
 
 	endif()
 
