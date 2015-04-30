@@ -8,12 +8,12 @@ if(POLICY CMP0020)
   cmake_policy(SET CMP0020 OLD)
 endif()
 
-# CloudCompare 'OpenNI2' plugin.
+# CloudCompare 'qOpenNI2SimpleRead' plugin.
 
 option( INSTALL_QOPENNI2_PLUGIN "Check to install qOpenNI2 plugin" OFF )
 if (INSTALL_QOPENNI2_PLUGIN)
   project( QOPENNI2_PLUGIN )
-  include( OpenNI2Support.cmake )
+  include( ../OpenNI2Support.cmake )
   include( ../CMakePluginTpl.cmake )
   target_link_OpenNI2( ${PROJECT_NAME} ${CLOUDCOMPARE_DEST_FOLDER} )
 endif()
