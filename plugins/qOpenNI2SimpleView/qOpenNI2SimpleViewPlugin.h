@@ -39,7 +39,7 @@ class qOpenNI2SimpleViewPlugin : public QObject, public ccStdPluginInterface
 	Q_INTERFACES(ccStdPluginInterface)
 #ifdef CC_QT5
 	//replace qOpenNI2 by the plugin name (IID should be unique - let's hope your plugin name is unique ;)
-	Q_PLUGIN_METADATA(IID "cccorp.cloudcompare.plugin.qOpenNI2")
+	Q_PLUGIN_METADATA(IID "scandyco.cloudcompare.plugin.qOpenNI2SimpleView")
 #endif
 
 public:

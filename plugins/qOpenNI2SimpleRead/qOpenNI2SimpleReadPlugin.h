@@ -36,7 +36,7 @@ class qOpenNI2SimpleReadPlugin : public QObject, public ccStdPluginInterface
 	Q_INTERFACES(ccStdPluginInterface)
 #ifdef CC_QT5
 	//replace qOpenNI2 by the plugin name (IID should be unique - let's hope your plugin name is unique ;)
-	Q_PLUGIN_METADATA(IID "cccorp.cloudcompare.plugin.qOpenNI2")
+	Q_PLUGIN_METADATA(IID "scandyco.cloudcompare.plugin.qOpenNI2SimpleRead")
 #endif
 
 public:
@@ -46,7 +46,7 @@ public:
 
 	//inherited from ccPluginInterface
 	virtual QString getName() const { return "qOpenNI2SimpleReadPlugin"; }
-	virtual QString getDescription() const { return "OpenNI2 plugin (add description here)"; }
+	virtual QString getDescription() const { return "OpenNI2 Simple-Read demo plugin"; }
 	virtual QIcon getIcon() const;
 
 	//inherited from ccStdPluginInterface
