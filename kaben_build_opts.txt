@@ -1,0 +1,25 @@
+
+//Check to install qOpenNI2 plugin
+INSTALL_QOPENNI2_SIMPLE_READ_PLUGIN:BOOL=ON
+
+//Check to install qOpenNI2 Simple View plugin
+INSTALL_QOPENNI2_SIMPLE_VIEW_PLUGIN:BOOL=ON
+
+//Include directory of OpenNI2
+OPENNI2_INCLUDE_DIR:PATH=C:/Users/Kaben/Developer/OpenNI2
+
+//Library file of OpenNI2
+OPENNI2_LIBRARY_FILE:FILEPATH=C:/Users/Kaben/Developer/OpenNI2/Bin/Win32-Debug/OpenNI2.lib
+
+//Shared library file of OpenNI2 (dll)
+OPENNI2_SHARED_LIBRARY_FILE:FILEPATH=C:/Users/Kaben/Developer/OpenNI2/Bin/Win32-Debug/OpenNI2.dll
+
+//Check to use Qt5 instead of Qt4
+USE_QT5:BOOL=ON
+
+QT_QMAKE_EXECUTABLE:FILEPATH=C:/Qt/5.4/msvc2013_opengl/bin/qmake.exe
+
+QT5_ROOT_PATH:PATH=C:/Qt/5.4/msvc2013_opengl/
+
+//Check to activate multithreaded compilation with MSVC
+OPTION_MP_BUILD:BOOL=ON
