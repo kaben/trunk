@@ -15,32 +15,30 @@
 //#                                                                        #
 //##########################################################################
 
-#ifndef CC_OPENNI2_DLG_HEADER
-#define CC_OPENNI2_DLG_HEADER
+#ifndef CC_OPENNI2_FRAME_LISTENER_HEADER
+#define CC_OPENNI2_FRAME_LISTENER_HEADER
 
-#ifndef UI_OPENNI2DLG_H
-#include "ui_OpenNI2Dlg.h"
+#ifndef _OPENNI_H_
+#include  <OpenNI.h>
 #endif
 
-//! Dialog for qOpenNI2 plugin
-class ccOpenNI2Dlg : public QDialog, public Ui::OpenNI2Dialog
+#define MAX_DEPTH 10000
+
+class QLabel;
+class ccMainAppInterface;
+
+class ccOpenNI2FrameListener : public openni::VideoStream::NewFrameListener
 {
 public:
-
-  //! Default constructor
-  ccOpenNI2Dlg(QWidget* parent = 0);
-
-  //! Returns output clound name
-  QString getCloudName() const;
-
-  //! Returns output clound name
-  bool grabRGBInfo();
-
-  //! Adds 'resolution mode' string
-  void addMode(const QString& mode);
-
-  //! Returns frame averaging
-  unsigned char getFrameAveragingCount() const;
+  ccMainAppInterface* m_app;
+  openni::VideoFrameRef m_frame;
+  QLabel *m_label;
+  float m_depth_histogram[MAX_DEPTH];
+public:
+  ccOpenNI2FrameListener(ccMainAppInterface &);
+  virtual ~ccOpenNI2FrameListener();
+  virtual void onNewFrame(openni::VideoStream &);
+  void setLabel(QLabel *);
 };
 
-#endif //CC_OPENNI2_DLG_HEADER
+#endif

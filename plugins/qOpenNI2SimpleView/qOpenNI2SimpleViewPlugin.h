@@ -19,10 +19,14 @@
 #define Q_OPENNI2_PLUGIN_HEADER
 
 // qCC
+#ifndef CC_STD_PLUGIN_INTERFACE_HEADER
 #include "../ccStdPluginInterface.h"
+#endif
 
 // Qt
+#ifndef QOBJECT_H
 #include <QObject>
+#endif
 
 // OpenNI2
 #ifndef _OPENNI_H_

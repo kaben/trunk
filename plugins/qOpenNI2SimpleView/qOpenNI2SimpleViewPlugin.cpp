@@ -110,6 +110,10 @@ void qOpenNI2SimpleViewPlugin::doStartGrabbing() {
   m_dlg->grabRGBCheckBox->setChecked(false);
   m_dlg->grabPushButton->setEnabled(true);
 
+  /* TODO: error checks. @kgn */
+  m_streamer->m_color_frame_listener.setLabel(m_dlg->view2D);
+  m_streamer->m_depth_frame_listener.setLabel(m_dlg->viewDepth);
+
   connect(m_dlg->grabPushButton, SIGNAL(clicked()), this, SLOT(grabCloud()));
   connect(m_dlg, SIGNAL(finished(int)), this, SLOT(dialogClosed(int)));
 

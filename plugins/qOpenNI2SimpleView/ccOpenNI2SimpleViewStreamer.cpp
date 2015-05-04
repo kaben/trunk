@@ -38,7 +38,9 @@ delete m_streamer;
 #include "ccMainAppInterface.h"
 
 ccOpenNI2SimpleViewStreamer::ccOpenNI2SimpleViewStreamer(ccMainAppInterface &app)
-  : m_app(&app)
+: m_app(&app)
+, m_depth_frame_listener(app)
+, m_color_frame_listener(app)
 {
   openni::Status rc = openni::OpenNI::initialize();
   console("After OpenNI2 initialization:", openni::OpenNI::getExtendedError());
@@ -53,10 +55,12 @@ openni::Status ccOpenNI2SimpleViewStreamer::setupAll(const char *uri){
   openni::Status rc = openni::STATUS_OK;
   if (rc == openni::STATUS_OK)
   { rc = setupDevice(m_dev, uri); }
-  if (rc == openni::STATUS_OK)
-  { rc = setupVideoStream(m_depth, openni::SENSOR_DEPTH, m_dev); }
-  if (rc == openni::STATUS_OK)
-  { rc = setupVideoStream(m_color, openni::SENSOR_COLOR, m_dev); }
+  if (rc == openni::STATUS_OK){
+    rc = setupVideoStream(m_depth, openni::SENSOR_DEPTH, m_dev, m_depth_frame_listener);
+  }
+  if (rc == openni::STATUS_OK){
+    rc = setupVideoStream(m_color, openni::SENSOR_COLOR, m_dev, m_color_frame_listener);
+  }
   return rc;
 }
 
@@ -73,11 +77,17 @@ openni::Status ccOpenNI2SimpleViewStreamer::setupDevice(
 openni::Status ccOpenNI2SimpleViewStreamer::setupVideoStream(
   openni::VideoStream &vs,
   openni::SensorType typ,
-  openni::Device &dev
+  openni::Device &dev,
+  ccOpenNI2FrameListener &fl
 ){
   openni::Status rc = vs.create(dev, typ);
   if (rc == openni::STATUS_OK) {
-    rc = vs.start();
+    rc = vs.addNewFrameListener(&fl);
+    if (rc == openni::STATUS_OK) {
+      rc = vs.start();
+    } else {
+      console("Couldn't add new-frame listener:", openni::OpenNI::getExtendedError());
+    }
     if (rc != openni::STATUS_OK) {
       console("Couldn't start stream:", openni::OpenNI::getExtendedError());
       vs.destroy();
@@ -88,12 +98,16 @@ openni::Status ccOpenNI2SimpleViewStreamer::setupVideoStream(
 }
 
 void ccOpenNI2SimpleViewStreamer::teardownAll(){
-  teardownVideoStream(m_color);
-  teardownVideoStream(m_depth);
+  teardownVideoStream(m_color, m_color_frame_listener);
+  teardownVideoStream(m_depth, m_depth_frame_listener);
   teardownDevice(m_dev);
 }
 
-void ccOpenNI2SimpleViewStreamer::teardownVideoStream(openni::VideoStream &vs){
+void ccOpenNI2SimpleViewStreamer::teardownVideoStream(
+  openni::VideoStream &vs,
+  ccOpenNI2FrameListener &fl
+){
+  vs.removeNewFrameListener(&fl);
   vs.stop();
   vs.destroy();
 }
