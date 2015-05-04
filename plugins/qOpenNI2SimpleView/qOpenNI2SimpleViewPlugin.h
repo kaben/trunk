@@ -24,83 +24,96 @@
 //Qt
 #include <QObject>
 
+//OpenNI2
+#ifndef _OPENNI_H_
+#include  <OpenNI.h>
+#endif
 class ccOpenNI2Dlg;
+class ccOpenNI2SimpleViewStreamer;
 class QActions;
 
 //! OpenNI2 qCC plugin
 /**
-	Look at the ccStdPluginInterface::m_app attribute to get access to
-	most of CC components (database, 3D views, console, etc.).
+  Look at the ccStdPluginInterface::m_app attribute to get access to
+  most of CC components (database, 3D views, console, etc.).
 **/
 
-class qOpenNI2SimpleViewPlugin : public QObject, public ccStdPluginInterface
+class qOpenNI2SimpleViewPlugin : public QObject, public ccStdPluginInterface, public openni::VideoStream::NewFrameListener
 {
-	Q_OBJECT
-	Q_INTERFACES(ccStdPluginInterface)
+  Q_OBJECT
+  Q_INTERFACES(ccStdPluginInterface)
 #ifdef CC_QT5
-	//replace qOpenNI2 by the plugin name (IID should be unique - let's hope your plugin name is unique ;)
-	Q_PLUGIN_METADATA(IID "scandyco.cloudcompare.plugin.qOpenNI2SimpleView")
+  //replace qOpenNI2 by the plugin name (IID should be unique - let's hope your plugin name is unique ;)
+  Q_PLUGIN_METADATA(IID "scandyco.cloudcompare.plugin.qOpenNI2SimpleView")
 #endif
 
 public:
 
-	//! Default constructor
-	qOpenNI2SimpleViewPlugin(QObject* parent=0);
+  //! Default constructor
+  qOpenNI2SimpleViewPlugin(QObject* parent=0);
 
-	//! Destructor
-	virtual ~qOpenNI2SimpleViewPlugin();
+  //! Destructor
+  virtual ~qOpenNI2SimpleViewPlugin();
 
-	//inherited from ccPluginInterface
-	virtual QString getName() const { return "qOpenNI2SimpleViewPlugin"; }
-	virtual QString getDescription() const { return "OpenNI2 Simple-View demo  capture"; }
-	virtual QIcon getIcon() const;
+  //inherited from ccPluginInterface
+  virtual QString getName() const { return "qOpenNI2SimpleViewPlugin"; }
+  virtual QString getDescription() const { return "OpenNI2 Simple-View demo  capture"; }
+  virtual QIcon getIcon() const;
 
-	//inherited from ccStdPluginInterface
-	void onNewSelection(const ccHObject::Container& selectedEntities);
-	/*
-	Return all actions (QAction objects). CloudCompare will automatically
-	add them to an icon in the plugin toolbar and to an entry in the
-	plugin menu (when several actions are returned, CC will create a
-	dedicated toolbar and sub-menu).
-	These actions must be connected to custom slots of this	plugin.
+  //inherited from ccStdPluginInterface
+  void onNewSelection(const ccHObject::Container& selectedEntities);
+  /*
+  Return all actions (QAction objects). CloudCompare will automatically
+  add them to an icon in the plugin toolbar and to an entry in the
+  plugin menu (when several actions are returned, CC will create a
+  dedicated toolbar and sub-menu).
+  These actions must be connected to custom slots of this plugin.
   */
-	virtual void getActions(QActionGroup& group);
+  virtual void getActions(QActionGroup& group);
+
+  void setupStreamer(const char *uri);
+  void teardownStreamer();
+  virtual void onNewFrame(openni::VideoStream &);
 
 protected slots:
 
-	/*** ADD YOUR CUSTOM ACTIONS' SLOTS HERE ***/
-	void doAction();
+  /*** ADD YOUR CUSTOM ACTIONS' SLOTS HERE ***/
+  //! Starts actions
+  void doStartGrabbing();
 
-	//! Starts actions
-	void doStartGrabbing();
+  //! Grab cloud
+  void grabCloud();
 
-	//! Grab cloud
-	void grabCloud();
+  //! On dialog end
+  void dialogClosed(int);
 
-	//! On dialog end
-	void dialogClosed(int);
-
-	//! Updates real time view
-	void updateRTView();
+  //! Updates real time view
+  void updateRTView();
 
 protected:
 
-	//! Actions
-	/** Add as many actions as you want.
-		Each will correspond to an icon in the dedicated
-		toolbar and an entry in the plugin menu.
-	**/
-	QAction* m_action;
+  //! Actions
+  /** Add as many actions as you want.
+    Each will correspond to an icon in the dedicated
+    toolbar and an entry in the plugin menu.
+  **/
+  QAction* m_action;
 
-	//! Associated dialog
-	ccOpenNI2Dlg* m_dlg;
+  //! Associated dialog
+  ccOpenNI2Dlg* m_dlg;
 
-	//! Timer to update RT view
-	QTimer* m_timer;
+  //! Timer to update RT view
+  QTimer* m_timer;
+
+  //OpenNI2
+  // openni::Device m_device;
+  // openni::VideoStream m_depth, m_ir, m_color;
+  ccOpenNI2SimpleViewStreamer *m_streamer;
+  int m_frame_ct;
 
 protected:
-	void console(const char *);
-	void console(const char *, const char *);
+  void console(const char *);
+  void console(const char *, const char *);
 };
 
 #endif

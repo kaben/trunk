@@ -21,27 +21,27 @@
 
 ccOpenNI2Dlg::ccOpenNI2Dlg(QWidget* parent) : QDialog(parent), Ui::OpenNI2Dialog()
 {
-	setupUi(this);
+  setupUi(this);
 
-	setWindowFlags(Qt::Tool/*Qt::Dialog | Qt::WindowStaysOnTopHint*/);
+  setWindowFlags(Qt::Tool/*Qt::Dialog | Qt::WindowStaysOnTopHint*/);
 }
 
 QString ccOpenNI2Dlg::getCloudName() const
 {
-	return cloudNameLineEdit->text();
+  return cloudNameLineEdit->text();
 }
 
 bool ccOpenNI2Dlg::grabRGBInfo()
 {
-	return grabRGBCheckBox->isChecked();
+  return grabRGBCheckBox->isChecked();
 }
 
 void ccOpenNI2Dlg::addMode(const QString& mode)
 {
-	resolutionComboBox->addItem(mode);
+  resolutionComboBox->addItem(mode);
 }
 
 unsigned char ccOpenNI2Dlg::getFrameAveragingCount() const
 {
-	return (unsigned char)std::min(frameAvgSpinBox->value(),255);
+  return (unsigned char)std::min(frameAvgSpinBox->value(),255);
 }

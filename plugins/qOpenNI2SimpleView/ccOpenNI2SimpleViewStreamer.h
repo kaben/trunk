@@ -15,30 +15,36 @@
 //#                                                                        #
 //##########################################################################
 
-#ifndef CC_OPENNI2_DLG_HEADER
-#define CC_OPENNI2_DLG_HEADER
+#ifndef CC_OPENNI2_SIMPLE_VIEW_STREAMER_HEADER
+#define CC_OPENNI2_SIMPLE_VIEW_STREAMER_HEADER
 
-#include "ui_OpenNI2Dlg.h"
+#ifndef _OPENNI_H_
+#include  <OpenNI.h>
+#endif
 
-//! Dialog for qOpenNI2 plugin
-class ccOpenNI2Dlg : public QDialog, public Ui::OpenNI2Dialog
+class ccMainAppInterface;
+
+class ccOpenNI2SimpleViewStreamer
 {
 public:
+  openni::Device m_dev;
+  openni::VideoStream m_depth, m_color;
+  ccMainAppInterface* m_app;
 
-  //! Default constructor
-  ccOpenNI2Dlg(QWidget* parent = 0);
+public:
+  ccOpenNI2SimpleViewStreamer(ccMainAppInterface &);
+  virtual ~ccOpenNI2SimpleViewStreamer();
 
-  //! Returns output clound name
-  QString getCloudName() const;
+  openni::Status setupAll(const char *uri);
+  openni::Status setupDevice(openni::Device &, const char *uri);
+  openni::Status setupVideoStream(openni::VideoStream &, openni::SensorType, openni::Device &);
 
-  //! Returns output clound name
-  bool grabRGBInfo();
+  void teardownAll();
+  void teardownVideoStream(openni::VideoStream &);
+  void teardownDevice(openni::Device &);
 
-  //! Adds 'resolution mode' string
-  void addMode(const QString& mode);
-
-  //! Returns frame averaging
-  unsigned char getFrameAveragingCount() const;
+  void console(const char *);
+  void console(const char *, const char *);
 };
 
-#endif //CC_OPENNI2_DLG_HEADER
+#endif
