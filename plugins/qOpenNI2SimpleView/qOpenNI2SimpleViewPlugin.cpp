@@ -37,25 +37,21 @@
 
 void qOpenNI2SimpleViewPlugin::console(const char *arg1){
   m_app->dispToConsole(QString("[qOpenNI2SimpleViewPlugin] Warning: %1").arg(arg1));
-
 }
+
 void qOpenNI2SimpleViewPlugin::console(const char *arg1, const char *arg2){
   m_app->dispToConsole(QString("[qOpenNI2SimpleViewPlugin] Warning: %1\n%2").arg(arg1, arg2));
-
 }
 
-//Default constructor: should mainly be used to initialize
-//actions (pointers) and other members
 qOpenNI2SimpleViewPlugin::qOpenNI2SimpleViewPlugin(QObject* parent/*=0*/)
   : QObject(parent)
   , ccStdPluginInterface()
   , m_action(0)
   , m_dlg(0)
-  , m_timer(0)
-  // , m_device(0)
   , m_streamer(0)
   , m_frame_ct(0)
 {}
+
 qOpenNI2SimpleViewPlugin::~qOpenNI2SimpleViewPlugin() {
   if (m_dlg){ delete m_dlg; }
   teardownStreamer();
@@ -76,41 +72,31 @@ void qOpenNI2SimpleViewPlugin::setupStreamer(const char *uri){
 
 void qOpenNI2SimpleViewPlugin::teardownStreamer(){
   if (m_streamer){
-    // m_streamer->teardownAll();
     delete m_streamer;
     m_streamer = 0;
   }
 }
 
-//This method should enable or disable each plugin action
-//depending on the currently selected entities ('selectedEntities').
-//For example: if none of the selected entities is a cloud, and your
-//plugin deals only with clouds, call 'm_action->setEnabled(false)'
+/*
+Enable or disable each plugin action depending on currently selected entities
+('selectedEntities'). E.g.: if none of the selected entities is a cloud,
+and plugin deals only with clouds, call 'm_action->setEnabled(false)'.
+*/
 void qOpenNI2SimpleViewPlugin::onNewSelection(const ccHObject::Container& selectedEntities) {
   //if (m_action)
   //  m_action->setEnabled(!selectedEntities.empty());
 }
 
-//This method returns all 'actions' of your plugin.
-//It will be called only once, when plugin is loaded.
+/* Returns all plugin 'actions'; called once when plugin is loaded. */
 void qOpenNI2SimpleViewPlugin::getActions(QActionGroup& group) {
-  //default action (if it has not been already created, it's the moment to do it)
   if (!m_action) {
-    //here we use the default plugin name, description and icon,
-    //but each action can have its own!
+    /* Each action can have its own plugin name, description and icon. */
     m_action = new QAction(getName(),this);
     m_action->setToolTip(getDescription());
     m_action->setIcon(getIcon());
-    //connect appropriate signal
-    //connect(m_action, SIGNAL(triggered()), this, SLOT(doAction()));
     connect(m_action, SIGNAL(triggered()), this, SLOT(doStartGrabbing()));
   }
-
   group.addAction(m_action);
-}
-
-void qOpenNI2SimpleViewPlugin::onNewFrame(openni::VideoStream &vstream){
-  console("got new frame.");
 }
 
 void qOpenNI2SimpleViewPlugin::doStartGrabbing() {
@@ -130,32 +116,21 @@ void qOpenNI2SimpleViewPlugin::doStartGrabbing() {
   //m_dlg->setModal(false);
   //m_dlg->setWindowModality(Qt::NonModal);
   m_dlg->show();
-
-  if (!m_timer) {
-    m_timer = new QTimer(this);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateRTView()));
-  }
-  m_timer->start(0);
 }
 void qOpenNI2SimpleViewPlugin::grabCloud()
 {}
 void qOpenNI2SimpleViewPlugin::dialogClosed(int){
   teardownStreamer();
 }
-void qOpenNI2SimpleViewPlugin::updateRTView()
-{}
 
-//This method should return the plugin icon (it will be used mainly
-//if your plugin as several actions in which case CC will create a
-//dedicated sub-menu entry with this icon.
+/*
+Plugin icon (it will be used mainly if plugin has several actions,
+in which case CC will create a dedicated sub-menu entry with this icon.
+*/
 QIcon qOpenNI2SimpleViewPlugin::getIcon() const {
-  //open qOpenNI2SimpleViewPlugin.qrc (text file), update the "prefix" and the
-  //icon(s) filename(s). Then save it with the right name (yourPlugin.qrc).
-  //(eventually, remove the original qOpenNI2SimpleViewPlugin.qrc file!)
   return QIcon(":/CC/plugin/qOpenNI2SimpleViewPlugin/icon.png");
 }
 
 #ifndef CC_QT5
-//Don't forget to replace 'qOpenNI2SimpleViewPlugin' by your own plugin class name here also!
-Q_EXPORT_PLUGIN2(qOpenNI2SimpleViewPlugin,qOpenNI2SimpleViewPlugin);
+Q_EXPORT_PLUGIN2(qOpenNI2SimpleViewPlugin, qOpenNI2SimpleViewPlugin);
 #endif

@@ -18,13 +18,13 @@
 #ifndef Q_OPENNI2_PLUGIN_HEADER
 #define Q_OPENNI2_PLUGIN_HEADER
 
-//qCC
+// qCC
 #include "../ccStdPluginInterface.h"
 
-//Qt
+// Qt
 #include <QObject>
 
-//OpenNI2
+// OpenNI2
 #ifndef _OPENNI_H_
 #include  <OpenNI.h>
 #endif
@@ -34,33 +34,28 @@ class QActions;
 
 //! OpenNI2 qCC plugin
 /**
-  Look at the ccStdPluginInterface::m_app attribute to get access to
-  most of CC components (database, 3D views, console, etc.).
+Look at the ccStdPluginInterface::m_app attribute to get access to
+most of CC components (database, 3D views, console, etc.).
 **/
 
-class qOpenNI2SimpleViewPlugin : public QObject, public ccStdPluginInterface, public openni::VideoStream::NewFrameListener
+class qOpenNI2SimpleViewPlugin : public QObject, public ccStdPluginInterface
 {
   Q_OBJECT
   Q_INTERFACES(ccStdPluginInterface)
 #ifdef CC_QT5
-  //replace qOpenNI2 by the plugin name (IID should be unique - let's hope your plugin name is unique ;)
   Q_PLUGIN_METADATA(IID "scandyco.cloudcompare.plugin.qOpenNI2SimpleView")
 #endif
 
 public:
-
-  //! Default constructor
   qOpenNI2SimpleViewPlugin(QObject* parent=0);
-
-  //! Destructor
   virtual ~qOpenNI2SimpleViewPlugin();
 
-  //inherited from ccPluginInterface
+  /* Inherited from ccPluginInterface */
   virtual QString getName() const { return "qOpenNI2SimpleViewPlugin"; }
   virtual QString getDescription() const { return "OpenNI2 Simple-View demo  capture"; }
   virtual QIcon getIcon() const;
 
-  //inherited from ccStdPluginInterface
+  /* Inherited from ccStdPluginInterface */
   void onNewSelection(const ccHObject::Container& selectedEntities);
   /*
   Return all actions (QAction objects). CloudCompare will automatically
@@ -73,25 +68,17 @@ public:
 
   void setupStreamer(const char *uri);
   void teardownStreamer();
-  virtual void onNewFrame(openni::VideoStream &);
 
 protected slots:
-
-  /*** ADD YOUR CUSTOM ACTIONS' SLOTS HERE ***/
+  /*** ACTIONS' SLOTS ***/
   //! Starts actions
   void doStartGrabbing();
-
   //! Grab cloud
   void grabCloud();
-
   //! On dialog end
   void dialogClosed(int);
 
-  //! Updates real time view
-  void updateRTView();
-
 protected:
-
   //! Actions
   /** Add as many actions as you want.
     Each will correspond to an icon in the dedicated
@@ -102,12 +89,7 @@ protected:
   //! Associated dialog
   ccOpenNI2Dlg* m_dlg;
 
-  //! Timer to update RT view
-  QTimer* m_timer;
-
-  //OpenNI2
-  // openni::Device m_device;
-  // openni::VideoStream m_depth, m_ir, m_color;
+  /* OpenNI2 */
   ccOpenNI2SimpleViewStreamer *m_streamer;
   int m_frame_ct;
 
