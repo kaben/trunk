@@ -20,6 +20,10 @@
 
 #include <QLabel>
 
+// #include "OniSampleUtilities.h"
+void calculateHistogram(float* pHistogram, int histogramSize, const openni::VideoFrameRef& frame);
+
+
 ccOpenNI2FrameListener::ccOpenNI2FrameListener(ccMainAppInterface &app)
 : m_app(&app)
 , m_label(0)
@@ -36,7 +40,25 @@ void ccOpenNI2FrameListener::onNewFrame(openni::VideoStream &vs){
     case openni::PIXEL_FORMAT_DEPTH_1_MM:
     case openni::PIXEL_FORMAT_DEPTH_100_UM:
       {
-        // calculateHistogram(m_depth_histogram, MAX_DEPTH, m_frame);
+        calculateHistogram(m_depth_histogram, MAX_DEPTH, m_frame);
+        const openni::DepthPixel* data = (const openni::DepthPixel*)m_frame.getData();
+        const int data_row_size = m_frame.getStrideInBytes() / sizeof(openni::DepthPixel);
+
+        QImage img(width, height, QImage::Format_RGB888);
+        const int img_stride = img.bytesPerLine()/width;
+
+      	for (int y = 0; y < height; ++y){
+          /* Get a pointer to the start of yth scanline's data. */
+          unsigned char *img_row = img.scanLine(y);
+      		for (int x = 0; x < width; ++x, ++data){
+            if(*data_pixel != 0){
+              	int gray = m_depth_histogram[*data];
+                unsigned char *img_pixel = img_row + x*img_stride;
+                img_pixel[0] = img_pixel[1] = img_pixel[2] = gray;
+            }
+      		}
+      	}
+        m_label->setPixmap(QPixmap::fromImage(img));
       }
     case openni::PIXEL_FORMAT_SHIFT_9_2:
     case openni::PIXEL_FORMAT_SHIFT_9_3:
