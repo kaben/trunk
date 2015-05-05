@@ -18,8 +18,8 @@
 #ifndef CC_OPENNI2_SIMPLE_VIEW_STREAMER_HEADER
 #define CC_OPENNI2_SIMPLE_VIEW_STREAMER_HEADER
 
-#ifndef CC_OPENNI2_FRAME_LISTENER_HEADER
-#include "ccOpenNI2FrameListener.h"
+#ifndef CC_OPENNI2_SIMPLE_VIEW_FRAME_LISTENER_HEADER
+#include "ccOpenNI2SimpleViewFrameListener.h"
 #endif
 
 #ifndef _OPENNI_H_
@@ -34,7 +34,7 @@ public:
   openni::Device m_dev;
   openni::VideoStream m_depth, m_color;
   ccMainAppInterface* m_app;
-  ccOpenNI2FrameListener m_depth_frame_listener, m_color_frame_listener;
+  ccOpenNI2SimpleViewFrameListener m_depth_frame_listener, m_color_frame_listener;
 
 public:
   ccOpenNI2SimpleViewStreamer(ccMainAppInterface &);
@@ -42,10 +42,10 @@ public:
 
   openni::Status setupAll(const char *uri);
   openni::Status setupDevice(openni::Device &, const char *uri);
-  openni::Status setupVideoStream(openni::VideoStream &, openni::SensorType, openni::Device &, ccOpenNI2FrameListener &);
+  openni::Status setupVideoStream(openni::VideoStream &, openni::SensorType, openni::Device &, ccOpenNI2SimpleViewFrameListener &);
 
   void teardownAll();
-  void teardownVideoStream(openni::VideoStream &, ccOpenNI2FrameListener &);
+  void teardownVideoStream(openni::VideoStream &, ccOpenNI2SimpleViewFrameListener &);
   void teardownDevice(openni::Device &);
 
   void console(const char *);

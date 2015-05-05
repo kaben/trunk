@@ -32,7 +32,7 @@
 #ifndef _OPENNI_H_
 #include  <OpenNI.h>
 #endif
-class ccOpenNI2Dlg;
+class ccOpenNI2SimpleViewDlg;
 class ccOpenNI2SimpleViewStreamer;
 class QActions;
 
@@ -91,7 +91,7 @@ protected:
   QAction* m_action;
 
   //! Associated dialog
-  ccOpenNI2Dlg* m_dlg;
+  ccOpenNI2SimpleViewDlg* m_dlg;
 
   /* OpenNI2 */
   ccOpenNI2SimpleViewStreamer *m_streamer;

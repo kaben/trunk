@@ -15,20 +15,20 @@
 //#                                                                        #
 //##########################################################################
 
-#ifndef CC_OPENNI2_DLG_HEADER
-#define CC_OPENNI2_DLG_HEADER
+#ifndef CC_OPENNI2_SIMPLE_VIEW_DLG_HEADER
+#define CC_OPENNI2_SIMPLE_VIEW_DLG_HEADER
 
-#ifndef UI_OPENNI2DLG_H
-#include "ui_OpenNI2Dlg.h"
+#ifndef ui_OpenNI2SimpleViewDlg_H
+#include "ui_OpenNI2SimpleViewDlg.h"
 #endif
 
 //! Dialog for qOpenNI2 plugin
-class ccOpenNI2Dlg : public QDialog, public Ui::OpenNI2Dialog
+class ccOpenNI2SimpleViewDlg : public QDialog, public Ui::OpenNI2SimpleViewDialog
 {
 public:
 
   //! Default constructor
-  ccOpenNI2Dlg(QWidget* parent = 0);
+  ccOpenNI2SimpleViewDlg(QWidget* parent = 0);
 
   //! Returns output clound name
   QString getCloudName() const;
@@ -43,4 +43,4 @@ public:
   unsigned char getFrameAveragingCount() const;
 };
 
-#endif //CC_OPENNI2_DLG_HEADER
+#endif //CC_OPENNI2_SIMPLE_VIEW_DLG_HEADER

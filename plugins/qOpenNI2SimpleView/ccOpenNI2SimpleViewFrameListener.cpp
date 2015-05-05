@@ -15,7 +15,7 @@
 //#                                                                        #
 //##########################################################################
 
-#include "ccOpenNI2FrameListener.h"
+#include "ccOpenNI2SimpleViewFrameListener.h"
 #include "ccMainAppInterface.h"
 
 #include <QLabel>
@@ -24,12 +24,12 @@
 void calculateHistogram(float* pHistogram, int histogramSize, const openni::VideoFrameRef& frame);
 
 
-ccOpenNI2FrameListener::ccOpenNI2FrameListener(ccMainAppInterface &app)
+ccOpenNI2SimpleViewFrameListener::ccOpenNI2SimpleViewFrameListener(ccMainAppInterface &app)
 : m_app(&app)
 , m_label(0)
 {}
-ccOpenNI2FrameListener::~ccOpenNI2FrameListener(){}
-void ccOpenNI2FrameListener::onNewFrame(openni::VideoStream &vs){
+ccOpenNI2SimpleViewFrameListener::~ccOpenNI2SimpleViewFrameListener(){}
+void ccOpenNI2SimpleViewFrameListener::onNewFrame(openni::VideoStream &vs){
   vs.readFrame(&m_frame);
   int width = m_frame.getWidth();
   int height = m_frame.getHeight();
@@ -51,7 +51,7 @@ void ccOpenNI2FrameListener::onNewFrame(openni::VideoStream &vs){
           /* Get a pointer to the start of yth scanline's data. */
           unsigned char *img_row = img.scanLine(y);
       		for (int x = 0; x < width; ++x, ++data){
-            if(*data_pixel != 0){
+            if(*data != 0){
               	int gray = m_depth_histogram[*data];
                 unsigned char *img_pixel = img_row + x*img_stride;
                 img_pixel[0] = img_pixel[1] = img_pixel[2] = gray;
@@ -87,6 +87,6 @@ void ccOpenNI2FrameListener::onNewFrame(openni::VideoStream &vs){
     }
   }
 }
-void ccOpenNI2FrameListener::setLabel(QLabel *label){
+void ccOpenNI2SimpleViewFrameListener::setLabel(QLabel *label){
   m_label = label;
 }

@@ -15,33 +15,33 @@
 //#                                                                        #
 //##########################################################################
 
-#include "ccOpenNI2Dlg.h"
+#include "ccOpenNI2SimpleViewDlg.h"
 
 #include <ccOctree.h>
 
-ccOpenNI2Dlg::ccOpenNI2Dlg(QWidget* parent) : QDialog(parent), Ui::OpenNI2Dialog()
+ccOpenNI2SimpleViewDlg::ccOpenNI2SimpleViewDlg(QWidget* parent) : QDialog(parent), Ui::OpenNI2SimpleViewDialog()
 {
   setupUi(this);
 
   setWindowFlags(Qt::Tool/*Qt::Dialog | Qt::WindowStaysOnTopHint*/);
 }
 
-QString ccOpenNI2Dlg::getCloudName() const
+QString ccOpenNI2SimpleViewDlg::getCloudName() const
 {
   return cloudNameLineEdit->text();
 }
 
-bool ccOpenNI2Dlg::grabRGBInfo()
+bool ccOpenNI2SimpleViewDlg::grabRGBInfo()
 {
   return grabRGBCheckBox->isChecked();
 }
 
-void ccOpenNI2Dlg::addMode(const QString& mode)
+void ccOpenNI2SimpleViewDlg::addMode(const QString& mode)
 {
   resolutionComboBox->addItem(mode);
 }
 
-unsigned char ccOpenNI2Dlg::getFrameAveragingCount() const
+unsigned char ccOpenNI2SimpleViewDlg::getFrameAveragingCount() const
 {
   return (unsigned char)std::min(frameAvgSpinBox->value(),255);
 }

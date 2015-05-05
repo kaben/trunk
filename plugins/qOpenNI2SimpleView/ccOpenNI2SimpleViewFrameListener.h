@@ -15,8 +15,8 @@
 //#                                                                        #
 //##########################################################################
 
-#ifndef CC_OPENNI2_FRAME_LISTENER_HEADER
-#define CC_OPENNI2_FRAME_LISTENER_HEADER
+#ifndef CC_OPENNI2_SIMPLE_VIEW_FRAME_LISTENER_HEADER
+#define CC_OPENNI2_SIMPLE_VIEW_FRAME_LISTENER_HEADER
 
 #ifndef _OPENNI_H_
 #include  <OpenNI.h>
@@ -27,7 +27,7 @@
 class QLabel;
 class ccMainAppInterface;
 
-class ccOpenNI2FrameListener : public openni::VideoStream::NewFrameListener
+class ccOpenNI2SimpleViewFrameListener : public openni::VideoStream::NewFrameListener
 {
 public:
   ccMainAppInterface* m_app;
@@ -35,8 +35,8 @@ public:
   QLabel *m_label;
   float m_depth_histogram[MAX_DEPTH];
 public:
-  ccOpenNI2FrameListener(ccMainAppInterface &);
-  virtual ~ccOpenNI2FrameListener();
+  ccOpenNI2SimpleViewFrameListener(ccMainAppInterface &);
+  virtual ~ccOpenNI2SimpleViewFrameListener();
   virtual void onNewFrame(openni::VideoStream &);
   void setLabel(QLabel *);
 };

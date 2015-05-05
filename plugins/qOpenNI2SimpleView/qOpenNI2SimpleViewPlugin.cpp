@@ -19,7 +19,7 @@
 #include "qOpenNI2SimpleViewPlugin.h"
 
 //dialog
-#include "ccOpenNI2Dlg.h"
+#include "ccOpenNI2SimpleViewDlg.h"
 
 #include <iostream>
 
@@ -106,7 +106,7 @@ void qOpenNI2SimpleViewPlugin::doStartGrabbing() {
   const char* device_uri = openni::ANY_DEVICE;
   setupStreamer(device_uri);
 
-  m_dlg = new ccOpenNI2Dlg(m_app->getMainWindow());
+  m_dlg = new ccOpenNI2SimpleViewDlg(m_app->getMainWindow());
   m_dlg->grabRGBCheckBox->setChecked(false);
   m_dlg->grabPushButton->setEnabled(true);
 

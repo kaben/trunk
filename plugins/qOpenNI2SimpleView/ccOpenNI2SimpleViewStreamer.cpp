@@ -78,7 +78,7 @@ openni::Status ccOpenNI2SimpleViewStreamer::setupVideoStream(
   openni::VideoStream &vs,
   openni::SensorType typ,
   openni::Device &dev,
-  ccOpenNI2FrameListener &fl
+  ccOpenNI2SimpleViewFrameListener &fl
 ){
   openni::Status rc = vs.create(dev, typ);
   if (rc == openni::STATUS_OK) {
@@ -105,7 +105,7 @@ void ccOpenNI2SimpleViewStreamer::teardownAll(){
 
 void ccOpenNI2SimpleViewStreamer::teardownVideoStream(
   openni::VideoStream &vs,
-  ccOpenNI2FrameListener &fl
+  ccOpenNI2SimpleViewFrameListener &fl
 ){
   vs.removeNewFrameListener(&fl);
   vs.stop();
